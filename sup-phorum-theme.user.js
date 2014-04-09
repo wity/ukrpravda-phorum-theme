@@ -7,6 +7,7 @@
 // @require             http://code.jquery.com/jquery-1.11.0.min.js
 // @resource            bootstrap_css http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css
 // @require             http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js
+// @run-at         		document-start
 // @grant               GM_addStyle
 // @grant               GM_getResourceText
 // ==/UserScript==
@@ -190,13 +191,14 @@ GM_addStyle(newCSS);
 
                     var pp = getPagerPrevPage(pages);
                     if (pp)
-                        div.append("<a class='navPages'>Попередня</a>").attr("href", $(pp).attr("href"));
+                        div.append($("<a class='navPages'>Попередня</a>").attr("href", $(pp).attr("href")));
 
                     div.append(pages);
 
                     var pn = getPagerNextPage(pages);
-                    if (pn)
-                        div.append("<a class='navPages'>Наступна</a>").attr("href", $(pn).attr("href"));
+                    if (pn) {
+                        div.append($("<a class='navPages'>Наступна</a>").attr("href", $(pn).attr("href")));
+                    }
 
                     return div;
                 }
@@ -480,12 +482,8 @@ GM_addStyle(newCSS);
                    .filter(function () { return $(this).attr("src").indexOf("new.gif") > -1 })
                    .each(function () {
                        var a = $(this).closest("a");
-                       //alert(a.html());
-                       //err();
-                       a.css("vertical-align", "super");
-                       //alert(a.parent().parent().find("a:first").html());
                        a.parent().find("a:first").attr("href", a.attr("href"));
-                       a.parent().prepend("<span class='new-icon'></span>");
+                       //a.parent().prepend("<span class='new-icon'></span>");
                        a.hide();
                    })
             },
@@ -534,9 +532,21 @@ GM_addStyle(newCSS);
             f();
 
             $('[data-hover="dropdown"]').dropdownHover();
-            $(document).ready(function () {
-                $("#content_section > div.frame").css("margin-top", $("div.top-page-header-container").height());
-            });
+
+            var _topOffset = $("div.top-page-header-container").height();
+            $("body").css("margin-top", _topOffset);
+
+            var anew = $("#new");
+            if (anew && anew.length) {
+                //$("<div>Нове</div>").insertAfter(anew);
+
+                anew.css("margin-top", _topOffset * -1)
+                   .css("height", _topOffset)
+                   .css("display", "block")
+                   .css("visibility", "hidden");
+
+                $("body").scrollTo(anew);
+            }
         }
 
     };
