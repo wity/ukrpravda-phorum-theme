@@ -416,13 +416,16 @@ GM_addStyle(newCSS);
 
             transformPosts();
 
-            fixNewAnchor();
-
-            applyDropdownHover();
-            setPageTopOffset();
-
-            scrollToNewAnchor();
             $("<div class='clearfix'></div>").insertBefore($("#main_content_section"));
+
+            setTimeout(function () {
+                setPageTopOffset();
+                applyDropdownHover();
+
+                fixNewAnchor();
+                scrollToNewAnchor();
+            }, 500);
+
         },
 
         //--------------------
@@ -540,8 +543,11 @@ GM_addStyle(newCSS);
             transformThreads();
             transformNewIcons();
 
-            applyDropdownHover();
-            setPageTopOffset();
+
+            setTimeout(function () {
+                setPageTopOffset();
+                applyDropdownHover();
+            }, 100);
         },
         addStyle = function (css, base64) {
             var datuURIs = document.createElement("link");
